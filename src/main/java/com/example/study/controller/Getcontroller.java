@@ -1,6 +1,7 @@
 package com.example.study.controller;
 
 import com.example.study.model.SearchParam;
+import com.example.study.model.network.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,6 +40,13 @@ public class Getcontroller {
         // {"account" : "", "email" : "", "page" : 0}으로 처리하기를 원할때는 받아온 searchParam을 return 시켜주면됨
         // Spring Boot 개발시 Jackson Library를 내장하고 있기떄문에 따로 처리하지않을시 Jackson으로 처리하라는 말임
         return searchParam;
+    }
+
+    @GetMapping("/header")
+    public Header getHeader(){
+
+        // {"resultCode : "OK" , "description : "OK" }
+        return Header.builder().resultCode("OK").description("OK").build();
     }
 
 }

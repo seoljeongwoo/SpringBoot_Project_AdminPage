@@ -3,6 +3,7 @@ package com.example.study.repository;
 import com.example.study.Repository.UserRepository;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.Entity.User;
+import jdk.vm.ci.meta.Local;
 import lombok.Data;
 import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 import org.junit.Assert;
@@ -25,36 +26,64 @@ public class UserRepositoryTest extends StudyApplicationTests {
     // Test Class 이므로 annotation Test 를 달아준다.
     @Test
     public void create(){
-        // DB : String sql = insert into user (%s, %s, %d) value(account, email, age);
 
-        // JPA
+        // ID는 DB에서 Auto Increment로 지정하여 Not Null이지만 따로 set해주지 않아도 됨
+        // ID를 set 해주지 않았음에도 불구하고 Auto Increment로 지정하였기 때문에 ID가 부여되어서 객체로 반환됨.
+
+        String account = "Test03";
+        String password = "Test03";
+        String status = "REGISTERED";
+        String email = "Test03@gmail.com";
+        String phoneNumber = "010-1111-3333";
+        LocalDateTime registeredAt = LocalDateTime.now();
+
+
         User user = new User();
-        // ID는 DB에서 Auto Increment로 지정하여 Not Null이지만 따로 set해주지 않아도 됨.
-        user.setAccount("TestUser03");
-        user.setEmail("TestUser03@gmail.com");
-        user.setPhoneNumber("010-3333-3333");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestUser03");
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+
 
         User newUser = userRepository.save(user);
-        // ID를 set 해주지 않았음에도 불구하고 Auto Increment로 지정하였기 때문에 ID가 부여되어서 객체로 반환됨.
-        System.out.println("newUser : " + newUser);
+
+        Assert.assertNotNull(newUser);
+
+
+
+
     }
     @Test
     @Transactional
     public void read(){
-        Optional<User> user = userRepository.findByAccount("TestUser03");
-        //Optional은 있을수도 있고 없을수도 있기때문에 있을때만 출력을 하겠다는 의미.
-        user.ifPresent(selectUser ->{
-            //System.out.println("user : " + selectUser);
-            //System.out.println("email : " + selectUser.getEmail());
-            selectUser.getOrderDetailList().stream().forEach(detail->{
 
-                System.out.println(detail.getItem());
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
+
+        user.getOrderGroupList().stream().forEach(orderGroup -> {
+
+            System.out.println("-------------------주문묶음------------------");
+            System.out.println("수령인 : " + orderGroup.getRevName());
+            System.out.println("수령지 : " + orderGroup.getRevAddress());
+            System.out.println("총금액 : " + orderGroup.getTotalPrice());
+            System.out.println("총수량 : " + orderGroup.getTotalQuantity());
+
+            System.out.println("--------------주문상세--------------");
+            orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                System.out.println("파트너사 이름 : " + orderDetail.getItem().getPartner().getName());
+                System.out.println("파트너사 카테고리 : " + orderDetail.getItem().getPartner().getCategory().getTitle());
+                System.out.println("주문 상품 : " + orderDetail.getItem().getName());
+                System.out.println("고객센터 번호 : " + orderDetail.getItem().getPartner().getCallCenter());
+                System.out.println("주문의 상태 : " + orderDetail.getStatus());
+                System.out.println("도착 예정 일자 : " + orderDetail.getArrivalDate());
+
 
             });
 
         });
+        Assert.assertNotNull(user);
+
     }
 
     @Test
