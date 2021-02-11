@@ -3,6 +3,7 @@ package com.example.study.repository;
 import com.example.study.Repository.UserRepository;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.Entity.User;
+import com.example.study.model.enumclass.UserStatus;
 import jdk.vm.ci.meta.Local;
 import lombok.Data;
 import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
@@ -32,7 +33,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
         String account = "Test03";
         String password = "Test03";
-        String status = "REGISTERED";
+        //UserStatus status = "REGISTERED";
         String email = "Test03@gmail.com";
         String phoneNumber = "010-1111-3333";
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -41,7 +42,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
         User user = new User();
         user.setAccount(account);
         user.setPassword(password);
-        user.setStatus(status);
+        //user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);

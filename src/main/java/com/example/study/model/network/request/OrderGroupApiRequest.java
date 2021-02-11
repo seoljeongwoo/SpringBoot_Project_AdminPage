@@ -1,5 +1,6 @@
 package com.example.study.model.network.request;
 
+import com.example.study.model.enumclass.OrderType;
 import jdk.vm.ci.meta.Local;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ public class OrderGroupApiRequest {
 
     private String status;
 
-    private String orderType;
+    private OrderType orderType;
 
     private String revAddress;
 
