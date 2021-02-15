@@ -5,14 +5,20 @@ import com.example.study.Repository.PartnerRepository;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.Entity.Item;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
 import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,13 +41,14 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
                 .partner(partnerRepository.getOne(body.getPartnerId()))
                 .build();
         Item newItem = baseRepository.save(item);
-        return response(newItem);
+        return Header.OK(response(newItem));
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(item -> response(item))
+                .map(Header::OK)
                 .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
@@ -69,6 +76,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
                     return newEntityItem;
                 })
                 .map(item -> response(item))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -84,7 +92,23 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
 
     }
 
-    private Header<ItemApiResponse> response (Item item){
+    @Override
+    public Header<List<ItemApiResponse>> search(Pageable pageable) {
+        Page<Item> items = baseRepository.findAll(pageable);
+        List<ItemApiResponse> itemApiResponseList = items.stream()
+                .map(item -> response(item))
+                .collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(items.getTotalPages())
+                .totalElements(items.getTotalElements())
+                .currentPage(items.getNumber())
+                .currentElements(items.getNumberOfElements())
+                .build();
+        return Header.OK(itemApiResponseList, pagination);
+    }
+
+    public ItemApiResponse response (Item item){
         ItemApiResponse body = ItemApiResponse.builder()
                 .id(item.getId())
                 .status(item.getStatus())
@@ -97,6 +121,6 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
                 .unregisteredAt(item.getUnregisteredAt())
                 .partnerId(item.getPartner().getId())
                 .build();
-        return Header.OK(body);
+        return body;
     }
 }

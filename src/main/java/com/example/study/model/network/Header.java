@@ -30,6 +30,8 @@ public class Header<T> {
     // Body 부분
     private T data;
 
+    private Pagination pagination;
+
     //OK
     public static <T> Header<T> OK(){
         return (Header<T>) Header.builder()
@@ -46,6 +48,16 @@ public class Header<T> {
                 .resultCode("OK")
                 .description("OK")
                 .data(Data)
+                .build();
+    }
+
+    public static <T> Header<T> OK(T Data,Pagination pagination){
+        return (Header<T>) Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .resultCode("OK")
+                .description("OK")
+                .data(Data)
+                .pagination(pagination)
                 .build();
     }
 
