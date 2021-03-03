@@ -1,6 +1,5 @@
 # Admin 페이지
 
-Spring Boot 첫 프로젝트로 Admin 페이지를 구현했습니다. <br>
 상품 판매서비스에 맞는 ERD 설계 및 Admin 페이지를 구현했습니다. <br>
 
 <br>
