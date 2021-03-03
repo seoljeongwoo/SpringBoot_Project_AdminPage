@@ -7,8 +7,8 @@ Spring Boot 첫 프로젝트로 Admin 페이지를 구현했습니다. <br>
 <br>
 
 ## 프로젝트 사용기술
-- [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle)
 - [Java 8](https://docs.oracle.com/javase/8/docs/api/)
+- [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle)
 - [MySQL](https://dev.mysql.com/doc/refman/8.0/en/)
 
 <br>
