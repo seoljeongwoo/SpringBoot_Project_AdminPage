@@ -28,5 +28,3 @@
 
 <br>
 
-## 참고 사이트
-- [Fast Campus 강의](https://www.fastcampus.co.kr/dev_online_javaend)
